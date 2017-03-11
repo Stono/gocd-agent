@@ -84,5 +84,5 @@ RUN npm install -g --depth=0 --no-summary --quiet peopledata-cli@$PEOPLEDATA_CLI
 WORKDIR /var/go
 
 # Boot commands
-ADD run_agent.sh /usr/local/bin/run_agent.sh
+COPY scripts/* /usr/local/bin/
 CMD ["/usr/local/bin/run_agent.sh"]
