@@ -32,8 +32,6 @@ spec:
           secretName: goagent.gpg-key
       containers:
       - name: gocd-agent-{{ENV.GOCD_AGENT_ENV}}
-        command: ["sleep"]
-        args: ["500"]
         image: stono/gocd-agent:latest
         imagePullPolicy: Always
         volumeMounts:
