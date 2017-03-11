@@ -1,0 +1,30 @@
+version: '2'
+
+networks:
+  gocd:
+
+services:
+  gocd.master:
+    image: stono/gocd.master
+    restart: always
+    networks:
+      gocd:
+        aliases:
+          - master
+          - gocd-master
+    ports:
+      - "8153:8153"
+    environment:
+      - AGENT_KEY=somethingunique
+      - MSG_TIME=0
+
+  gocd.agent:
+    image: stono/gocd.agent
+    restart: always
+    networks:
+      gocd:
+    links:
+      - gocd.master
+    environment:
+      - AGENT_KEY=somethingunique
+      - GO_SERVER=gocd-master

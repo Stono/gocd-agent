@@ -1,0 +1,11 @@
+version: '2'
+services:
+  gocd.master:
+    volumes:
+      - ./data/master/var/lib/go-server:/var/lib/go-server
+      - ./data/master/etc/go:/etc/go
+
+  gocd.agent:
+    build: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
