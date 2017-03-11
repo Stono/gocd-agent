@@ -20,7 +20,7 @@ else
 
   echo Getting credentials for "$CLUSTER_NAME"
   gcloud container clusters get-credentials "$CLUSTER_NAME" --zone europe-west1-c --project "$GCP_PROJECT_NAME"
-  docker login -u oauth3accesstoken -p "$(gcloud auth print-access-token)" https://eu.gcr.io
+  docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://eu.gcr.io
   cp -R /root/.docker /var/go/.docker
   cp -R /root/.config /var/go/.config
   cp -R /root/.kube /var/go/.kube
