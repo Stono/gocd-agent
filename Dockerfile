@@ -81,6 +81,8 @@ ARG GO_DEPENDENCY_LABEL_CLI_PEOPLEDATA=
 RUN npm install -g --depth=0 --no-summary --quiet peopledata-cli@$PEOPLEDATA_CLI_VERSION && \
     rm -rf /tmp/npm*
 
+WORKDIR /var/go
+
 # Boot commands
 ADD run_agent.sh /usr/local/bin/run_agent.sh
 CMD ["/usr/local/bin/run_agent.sh"]
