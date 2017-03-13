@@ -41,7 +41,7 @@ else
   chmod 0644 /var/go/.ssh/id_rsa.pub
 fi
 
-if [ -d "/etc/goagent-gpg" ]; then
+if [ ! -d "/etc/goagent-gpg" ]; then
   echo "WARNING: No GPG key found in /etc/goagent-gpg"
   echo " - git-crypt will not work!"
 else
