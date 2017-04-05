@@ -63,4 +63,4 @@ chmod 0777 /var/run/docker.sock
 echo Fixing file permissions
 chown -R go:go /home/go
 
-/sbin/my_init
+/docker-entrypoint.sh
