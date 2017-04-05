@@ -1,21 +1,26 @@
-FROM gocd/gocd-agent:17.2.0
+FROM gocd/gocd-agent-centos-7:v17.3.0 
 MAINTAINER Karl Stoney <me@karlstoney.com>
 
 # Component versions used in this build
-ENV KUBECTL_VERSION 1.5.3
+ENV KUBECTL_VERSION 1.6.0
 ENV TERRAFORM_VERSION 0.8.7
 ENV DOCKER_VERSION 1.11.2
 ENV COMPOSE_VERSION 1.9.0
-ENV PEOPLEDATA_CLI_VERSION 1.2.36
-ENV CLOUD_SDK_VERSION 146.0.0-0
+ENV PEOPLEDATA_CLI_VERSION 1.2.37
+ENV CLOUD_SDK_VERSION 149.0.0-1
 
-# Get nodejs repos
-RUN curl --silent --location https://deb.nodesource.com/setup_6.x | bash - >/dev/null
+# Get nodejs repos 
+RUN curl --silent --location https://rpm.nodesource.com/setup_7.x | bash - 
+
+# Install nodejs, currently 7.4.0
+RUN yum -y install nodejs-7.4.* gcc-c++ make git && \
+    yum -y clean all
+
 
 # Add our dependencies
-RUN apt-get -y -q update && \
-    apt-get -y -q install nodejs wget sudo python-openssl build-essential libssl-dev g++ unzip && \
-    apt-get -y -q clean all
+RUN yum -y -q update && \
+    yum -y -q install nodejs wget sudo python-openssl build-essential libssl-dev g++ unzip openssl-devel && \
+    yum -y -q clean all
 
 # Terraform
 RUN cd /tmp && \
@@ -57,14 +62,13 @@ RUN cd /tmp && \
     make install PREFIX=/usr/local && \
     rm -rf /tmp/git-crypt*
 
-ENV CLOUDSDK_INSTALL_DIR /usr/lib/google-cloud-sdk
+ENV CLOUDSDK_INSTALL_DIR /usr/lib64/google-cloud-sdk
 ENV CLOUD_SDK_REPO cloud-sdk-trusty
 ENV CLOUDSDK_PYTHON_SITEPACKAGES 1
-RUN echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN curl --silent https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-RUN apt-get -y -q update && \
-    apt-get -y -q install google-cloud-sdk=$CLOUD_SDK_VERSION && \
-    apt-get -y -q clean all
+COPY gcloud.repo /etc/yum.repos.d/
+RUN yum -y -q update && \
+    yum -y -q install google-cloud-sdk-$CLOUD_SDK_VERSION* && \
+    yum -y -q clean all
 RUN mkdir -p /etc/gcloud/keys
 
 # Get the version of kubectl that matches our node deployment
@@ -81,7 +85,7 @@ ARG GO_DEPENDENCY_LABEL_CLI_PEOPLEDATA=
 RUN npm install -g --depth=0 --no-summary --quiet peopledata-cli@$PEOPLEDATA_CLI_VERSION && \
     rm -rf /tmp/npm*
 
-WORKDIR /var/go
+WORKDIR /godata
 
 # Boot commands
 COPY scripts/* /usr/local/bin/

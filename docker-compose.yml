@@ -5,7 +5,7 @@ networks:
 
 services:
   gocd.master:
-    image: stono/gocd.master
+    image: stono/gocd-master
     restart: always
     networks:
       gocd:
@@ -19,7 +19,7 @@ services:
       - MSG_TIME=0
 
   gocd.agent:
-    image: stono/gocd.agent
+    image: stono/gocd-agent
     restart: always
     networks:
       gocd:

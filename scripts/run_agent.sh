@@ -21,9 +21,9 @@ else
   echo Getting credentials for "$CLUSTER_NAME"
   gcloud container clusters get-credentials "$CLUSTER_NAME" --zone europe-west1-c --project "$GCP_PROJECT_NAME"
   docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://eu.gcr.io
-  cp -R /root/.docker /var/go/.docker
-  cp -R /root/.config /var/go/.config
-  cp -R /root/.kube /var/go/.kube
+  cp -R /root/.docker /home/go/.docker
+  cp -R /root/.config /home/go/.config
+  cp -R /root/.kube /home/go/.kube
 fi
 
 if [ ! -f "/etc/goagent-ssh/ssh-privatekey" ]; then
@@ -31,14 +31,14 @@ if [ ! -f "/etc/goagent-ssh/ssh-privatekey" ]; then
   echo " - Pushing and pulling from private repositories will not work!"
 else
   echo Copying public and private keys
-  mkdir -p /var/go/.ssh
-  cp /etc/goagent-ssh/ssh-privatekey /var/go/.ssh/id_rsa
-  cp /etc/goagent-ssh/ssh-publickey /var/go/.ssh/id_rsa.pub
-  echo -e "Host *\n\tStrictHostKeyChecking no\n" >> /var/go/.ssh/config
-  chmod 0700 /var/go/.ssh
-  chmod 0600 /var/go/.ssh/id_rsa
-  chmod 0600 /var/go/.ssh/config
-  chmod 0644 /var/go/.ssh/id_rsa.pub
+  mkdir -p /home/go/.ssh
+  cp /etc/goagent-ssh/ssh-privatekey /home/go/.ssh/id_rsa
+  cp /etc/goagent-ssh/ssh-publickey /home/go/.ssh/id_rsa.pub
+  echo -e "Host *\n\tStrictHostKeyChecking no\n" >> /home/go/.ssh/config
+  chmod 0700 /home/go/.ssh
+  chmod 0600 /home/go/.ssh/id_rsa
+  chmod 0600 /home/go/.ssh/config
+  chmod 0644 /home/go/.ssh/id_rsa.pub
 fi
 
 if [ ! -d "/etc/goagent-gpg" ]; then
@@ -61,6 +61,6 @@ echo Making docker socket accessible to go user
 chmod 0777 /var/run/docker.sock
 
 echo Fixing file permissions
-chown -R go:go /var/go
+chown -R go:go /home/go
 
 /sbin/my_init
