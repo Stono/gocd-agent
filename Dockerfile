@@ -1,5 +1,35 @@
-FROM gocd/gocd-agent-centos-7:v17.3.0 
+FROM centos:7 
 MAINTAINER Karl Stoney <me@karlstoney.com>
+
+ARG GOCD_VERSION="17.3.0"
+ARG DOWNLOAD_URL="https://download.gocd.io/binaries/17.3.0-4704/generic/go-agent-17.3.0-4704.zip"
+
+ADD ${DOWNLOAD_URL} /tmp/go-agent.zip
+ADD https://github.com/krallin/tini/releases/download/v0.14.0/tini-static-amd64 /usr/local/sbin/tini
+ADD https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 /usr/local/sbin/gosu
+
+# force encoding
+ENV LANG=en_US.utf8
+
+RUN \
+# add mode and permissions for files we added above
+  chmod 0755 /usr/local/sbin/tini && \
+  chown root:root /usr/local/sbin/tini && \
+  chmod 0755 /usr/local/sbin/gosu && \
+  chown root:root /usr/local/sbin/gosu && \
+# add our user and group first to make sure their IDs get assigned consistently,
+# regardless of whatever dependencies get added
+  groupadd -g 1000 go && \ 
+  useradd -u 1000 -g go go && \
+  yum update -y && \ 
+  yum install -y java-1.8.0-openjdk-headless git mercurial subversion openssh-clients bash unzip && \ 
+  yum clean all && \
+# unzip the zip file into /go-agent, after stripping the first path prefix
+  unzip /tmp/go-agent.zip -d / && \
+  mv go-agent-${GOCD_VERSION} /go-agent && \
+  rm /tmp/go-agent.zip
+
+ADD docker-entrypoint.sh /
 
 # Component versions used in this build
 ENV KUBECTL_VERSION 1.6.0
@@ -15,7 +45,6 @@ RUN curl --silent --location https://rpm.nodesource.com/setup_7.x | bash -
 # Install nodejs, currently 7.4.0
 RUN yum -y install nodejs-7.4.* gcc-c++ make git && \
     yum -y clean all
-
 
 # Add our dependencies
 RUN yum -y -q update && \
