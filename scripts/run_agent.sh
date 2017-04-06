@@ -18,8 +18,9 @@ else
     echo Cluster name detected as $CLUSTER_NAME
   fi
 
+  CLUSTER_ZONE=${CLUSTER_ZONE:-"europe-west1-c"}
   echo Getting credentials for "$CLUSTER_NAME"
-  gcloud container clusters get-credentials "$CLUSTER_NAME" --zone europe-west1-c --project "$GCP_PROJECT_NAME"
+  gcloud container clusters get-credentials "$CLUSTER_NAME" --zone "$CLUSTER_ZONE" --project "$GCP_PROJECT_NAME"
   docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://eu.gcr.io
   cp -R /root/.docker /var/go/.docker
   cp -R /root/.config /var/go/.config
