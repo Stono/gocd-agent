@@ -1,13 +1,13 @@
-FROM gocd/gocd-agent:17.2.0
+FROM gocd/gocd-agent-deprecated:17.2.0
 MAINTAINER Karl Stoney <me@karlstoney.com>
 
 # Component versions used in this build
-ENV KUBECTL_VERSION 1.5.3
+ENV KUBECTL_VERSION 1.6.0
 ENV TERRAFORM_VERSION 0.8.7
 ENV DOCKER_VERSION 1.11.2
 ENV COMPOSE_VERSION 1.9.0
 ENV PEOPLEDATA_CLI_VERSION 1.2.36
-ENV CLOUD_SDK_VERSION 146.0.0-0
+ENV CLOUD_SDK_VERSION 149.0.0-1
 
 # Get nodejs repos
 RUN curl --silent --location https://deb.nodesource.com/setup_6.x | bash - >/dev/null
