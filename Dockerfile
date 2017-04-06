@@ -7,7 +7,7 @@ ENV TERRAFORM_VERSION 0.8.7
 ENV DOCKER_VERSION 1.11.2
 ENV COMPOSE_VERSION 1.9.0
 ENV PEOPLEDATA_CLI_VERSION 1.2.36
-ENV CLOUD_SDK_VERSION 149.0.0-1
+ENV CLOUD_SDK_VERSION 150.0.0-0
 
 # Get nodejs repos
 RUN curl --silent --location https://deb.nodesource.com/setup_6.x | bash - >/dev/null
