@@ -64,4 +64,5 @@ chmod 0777 /var/run/docker.sock
 echo Fixing file permissions
 chown -R go:go /var/go
 
+echo Starting GoCD
 /sbin/my_init

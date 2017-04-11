@@ -2,15 +2,15 @@ FROM gocd/gocd-agent-deprecated:17.2.0
 MAINTAINER Karl Stoney <me@karlstoney.com>
 
 # Component versions used in this build
-ENV KUBECTL_VERSION 1.6.0
-ENV TERRAFORM_VERSION 0.8.7
-ENV DOCKER_VERSION 1.11.2
-ENV COMPOSE_VERSION 1.9.0
-ENV PEOPLEDATA_CLI_VERSION 1.2.36
-ENV CLOUD_SDK_VERSION 150.0.0-0
+ARG KUBECTL_VERSION=1.6.0
+ARG TERRAFORM_VERSION=0.9.2
+ARG DOCKER_VERSION=1.11.2
+ARG COMPOSE_VERSION=1.9.0
+ARG GO_DEPENDENCY_LABEL_CLI_PEOPLEDATA=1.2.37
+ARG CLOUD_SDK_VERSION=150.0.0-0
 
 # Get nodejs repos
-RUN curl --silent --location https://deb.nodesource.com/setup_6.x | bash - >/dev/null
+RUN curl --silent --location https://deb.nodesource.com/setup_7.x | bash - >/dev/null
 
 # Add our dependencies
 RUN apt-get -y -q update && \
@@ -19,7 +19,7 @@ RUN apt-get -y -q update && \
 
 # Terraform
 RUN cd /tmp && \
-    wget https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
+    wget --quiet https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION\_linux_amd64.zip && \
     unzip terraform_*.zip && \
     mv terraform /usr/local/bin && \
     rm -rf *terraform*
@@ -77,7 +77,6 @@ RUN gcloud config set --installation component_manager/disable_update_check true
 RUN sed -i -- 's/\"disable_updater\": false/\"disable_updater\": true/g' $CLOUDSDK_INSTALL_DIR/lib/googlecloudsdk/core/config.json
 
 # Add the Peopledata CLI
-ARG GO_DEPENDENCY_LABEL_CLI_PEOPLEDATA=
 RUN npm install -g --depth=0 --no-summary --quiet peopledata-cli@$PEOPLEDATA_CLI_VERSION && \
     rm -rf /tmp/npm*
 
