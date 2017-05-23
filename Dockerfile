@@ -7,7 +7,7 @@ ARG TERRAFORM_VERSION=0.9.2
 ARG DOCKER_VERSION=1.11.2
 ARG COMPOSE_VERSION=1.9.0
 ARG GO_DEPENDENCY_LABEL_CLI_PEOPLEDATA=1.2.37
-ARG CLOUD_SDK_VERSION=150.0.0-0
+ARG CLOUD_SDK_VERSION=155.0.0-0
 
 # Get nodejs repos
 RUN curl --silent --location https://deb.nodesource.com/setup_7.x | bash - >/dev/null
